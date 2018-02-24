@@ -3,6 +3,8 @@ package com.neeraj.microservices.currencyconversionservice.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import com.neeraj.microservices.currencyconversionservice.proxy.CurrencyExchange
 
 @RestController
 public class CorrencyConversionController {
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private CurrencyExchangeProxy proxy;
@@ -38,8 +41,9 @@ public class CorrencyConversionController {
 	@GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionBean getCurrencyConversionBeanFeign(@PathVariable String from, @PathVariable String to,
 			@PathVariable int quantity) {
-
+		
 		CurrencyConversionBean conversionBean = proxy.getCurrecyExchanged(from, to);
+		logger.info("{}",conversionBean);
 		return new CurrencyConversionBean(conversionBean.getId(), from, to, conversionBean.getConversionFactor(),
 				conversionBean.getPort(), quantity, (quantity * conversionBean.getConversionFactor().intValueExact()));
 	}

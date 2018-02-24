@@ -2,6 +2,8 @@ package com.neeraj.microservices.currencyexchangeservice.controller;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,8 @@ import com.neeraj.microservices.currencyexchangeservice.repository.CurrencyExcha
 @RestController
 public class MyCurrencyExchangeControler {
 	
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private Environment env;
 	
@@ -22,7 +26,9 @@ public class MyCurrencyExchangeControler {
 	
 	@GetMapping("/currency-exchange-service/from/{from}/to/{to}")
 	public CurrencyExchangeBean getCurrecyExchanged(@PathVariable String from, @PathVariable String to) {
+		
 		CurrencyExchangeBean bean=repo.findByFromAndTo(from, to);
+		logger.info("{}",bean);
 		bean.setPort(Integer.parseInt(env.getProperty("local.server.port")));
 		return bean;
 	}
