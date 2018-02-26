@@ -22,6 +22,22 @@ public class CorrencyConversionController {
 	@Autowired
 	private CurrencyExchangeProxy proxy;
 
+
+	@GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
+	public CurrencyConversionBean getCurrencyConversionBeanFeign(@PathVariable String from, @PathVariable String to,
+			@PathVariable int quantity) {
+		
+		CurrencyConversionBean conversionBean = proxy.getCurrecyExchanged(from, to);
+		logger.info("{}",conversionBean);
+		return new CurrencyConversionBean(conversionBean.getId(), from, to, conversionBean.getConversionFactor(),
+				conversionBean.getPort(), quantity, (quantity * conversionBean.getConversionFactor().intValueExact()));
+	}
+	
+	
+	
+	
+	
+
 	@GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
 	public CurrencyConversionBean getCurrencyConversionBean(@PathVariable String from, @PathVariable String to,
 			@PathVariable int quantity) {
@@ -34,16 +50,6 @@ public class CorrencyConversionController {
 				uriVariables);
 		CurrencyConversionBean conversionBean = forEntity.getBody();
 
-		return new CurrencyConversionBean(conversionBean.getId(), from, to, conversionBean.getConversionFactor(),
-				conversionBean.getPort(), quantity, (quantity * conversionBean.getConversionFactor().intValueExact()));
-	}
-
-	@GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
-	public CurrencyConversionBean getCurrencyConversionBeanFeign(@PathVariable String from, @PathVariable String to,
-			@PathVariable int quantity) {
-		
-		CurrencyConversionBean conversionBean = proxy.getCurrecyExchanged(from, to);
-		logger.info("{}",conversionBean);
 		return new CurrencyConversionBean(conversionBean.getId(), from, to, conversionBean.getConversionFactor(),
 				conversionBean.getPort(), quantity, (quantity * conversionBean.getConversionFactor().intValueExact()));
 	}

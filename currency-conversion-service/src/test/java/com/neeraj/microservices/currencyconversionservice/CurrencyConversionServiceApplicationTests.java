@@ -1,4 +1,4 @@
-package com.neeraj.microservices.currencyconversionservice.currencyconversionservice;
+package com.neeraj.microservices.currencyconversionservice;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
